@@ -115,7 +115,6 @@
             android:background="@drawable/register_edit_text"
             android:ems="10"
             android:hint="Telefon"
-            android:inputType="number"
             android:padding="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

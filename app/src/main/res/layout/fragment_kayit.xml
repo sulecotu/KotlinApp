@@ -4,55 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login.LoginActivity">
 
-    <EditText
-        android:id="@+id/etEmailTelefonUsername"
-        android:layout_width="0dp"
+    tools:context=".Login.KayitFragment">
+
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Telefon Numarası,Email veya Kullanıcı Adı"
-        android:inputType="textPersonName"
-        android:background="@drawable/register_edit_text"
-        android:padding="15dp"
+        android:layout_marginTop="64dp"
+        android:text="AD VE ŞİFRE"
+        android:textColor="@color/siyah"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etAdSoyad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Adınız ve Soyadınız"
+        android:padding="15dp"
+        android:background="@drawable/register_edit_text"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <EditText
         android:id="@+id/etSifre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="Şifre"
-        android:background="@drawable/register_edit_text"
         android:padding="15dp"
-        android:inputType="textPassword"
+        android:background="@drawable/register_edit_text"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmailTelefonUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/etAdSoyad" />
 
-    <Button
-        android:id="@+id/btnGirisYap"
+    <EditText
+        android:id="@+id/etKullancıAdı"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/beyaz"
-        android:enabled="false"
-        android:text="Giriş Yap"
-        android:textAllCaps="false"
-        android:textColor="@color/siyah"
+        android:ems="10"
+        android:hint="Kullanıcı Adı"
+        android:background="@drawable/register_edit_text"
+        android:padding="15dp"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etSifre" />
+
+    <Button
+        android:id="@+id/btnGiris"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="GİRİŞ"
+        android:enabled="false"
+        android:textAllCaps="false"
+        android:textColor="@color/siyah"
+        android:background="@color/beyaz"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etKullancıAdı" />
     <View
         android:id="@+id/golgelik1"
         android:layout_width="0dp"
@@ -71,19 +102,27 @@
     </View>
 
     <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Hesabın zaten var mı?"
+        app:layout_constraintEnd_toStartOf="@+id/tvGirisYap"
+        app:layout_constraintHorizontal_bias="0.883"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/golgelik1" />
+
+    <TextView
         android:id="@+id/tvGirisYap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="185dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="184dp"
-        android:layout_marginBottom="16dp"
-        android:text="Kaydol"
-        android:textSize="15dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginRight="120dp"
+        android:text="Giriş Yap"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/golgelik1"
-        app:layout_constraintVertical_bias="0.812" />
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

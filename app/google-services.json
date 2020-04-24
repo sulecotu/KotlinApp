@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "863410578613-m9r0sll5m7hcmahfse4hvbsth5qefco2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.instakotlinapp",
+            "certificate_hash": "08916ee5e4bbfac5e7b0dbb406be4e3a9507235c"
+          }
+        },
+        {
           "client_id": "863410578613-ua3834dkljhjafsnpmb4h23pv2ahn3os.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
