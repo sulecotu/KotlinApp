@@ -10,21 +10,30 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import com.example.instakotlinapp.Home.HomeActivity
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.EventbusDataEvents
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_register.*
 import org.greenrobot.eventbus.EventBus
 
 class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChangedListener {
     lateinit var manager: FragmentManager
+    lateinit var  mRef: DatabaseReference
+    lateinit var mAuth: FirebaseAuth
+    lateinit var mAuthListener:FirebaseAuth.AuthStateListener
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+        setupAuthListener()
 
-
+        // bu tanımlamayı yapınca doğrudan database de instkotlinApp erişiriz.
+        mAuth= FirebaseAuth.getInstance()
+        mRef=FirebaseDatabase.getInstance().reference
         manager = supportFragmentManager
         manager.addOnBackStackChangedListener(this)
 
@@ -32,6 +41,7 @@ class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChanged
     }
 
     private fun init() {
+
         tvGirisYap.setOnClickListener {
             var intent= Intent(this@RegisterActivity,LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
@@ -93,15 +103,50 @@ class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChanged
         btnIleri.setOnClickListener {
             //girilen telefon numarası uygunssa
             if (etGirisYontemi.hint.toString().equals("Telefon")) {
-
+                var telefonKullanimdaMi=false
                 if(isValidTelefon(etGirisYontemi.text.toString())){
-                    loginRoot.visibility = View.GONE
-                    loginContainer.visibility = View.VISIBLE
-                    var transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.loginContainer, TelefonKoduGirFragment())
-                    transaction.addToBackStack("telefonKoduGirFragmentEklendi")
-                    transaction.commit()
-                    EventBus.getDefault().postSticky(EventbusDataEvents.KayitBilgileriniGonder(etGirisYontemi.text.toString(), null, null, null, false))
+
+                   mRef.child("kullanıcılar").addListenerForSingleValueEvent(object : ValueEventListener{
+                       override fun onCancelled(p0: DatabaseError) {
+
+
+                       }
+
+                       override fun onDataChange(p0: DataSnapshot) {
+                         if(p0!!.getValue()!= null){
+
+                             for( kullanici in p0!!.children){
+                                 var okunanKullanici=kullanici.getValue(Users::class.java)
+                                 if(okunanKullanici!!.telefon_numarasi!!.equals(etGirisYontemi.text.toString())){
+                                     Toast.makeText(this@RegisterActivity,"Bu Telefon Numarası Kullanılıyor.",Toast.LENGTH_SHORT).show()
+                                     telefonKullanimdaMi=true
+                                     break
+
+                                 }
+
+
+                             }
+                             if(telefonKullanimdaMi==false){
+                                 loginRoot.visibility = View.GONE
+                                 loginContainer.visibility = View.VISIBLE
+                                 var transaction = supportFragmentManager.beginTransaction()
+                                 transaction.replace(R.id.loginContainer, TelefonKoduGirFragment())
+                                 transaction.addToBackStack("telefonKoduGirFragmentEklendi")
+                                 transaction.commit()
+                                 EventBus.getDefault().postSticky(EventbusDataEvents.KayitBilgileriniGonder(etGirisYontemi.text.toString(), null, null, null, false))
+
+
+                             }
+
+
+                         }
+
+                       }
+
+
+                   })
+
+
 
                 }else{// eğer telefn numarası uygun değilse ekrana mesaj yazar
                     Toast.makeText(this,"Lütfen Geçerli Bir Telefon Numarası Giriniz",Toast.LENGTH_SHORT).show()
@@ -112,22 +157,55 @@ class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChanged
             } else { /// girilen email uygunsa
                 if(isValidEmail(etGirisYontemi.text.toString())){
 
+                    mRef.child("kullanıcılar").addListenerForSingleValueEvent(object :ValueEventListener{
+                        var emailKullanimdaMi=false
 
-                    loginRoot.visibility = View.GONE
-                    loginContainer.visibility = View.VISIBLE
-                    var transaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.loginContainer, KayitFragment())
-                    transaction.addToBackStack("EmailGirisYontemiFragmentEklendi")
-                    transaction.commit()
-                    EventBus.getDefault().postSticky(
-                        EventbusDataEvents.KayitBilgileriniGonder(
-                            null,
-                            etGirisYontemi.text.toString(),
-                            null,
-                            null,
-                            true
-                        )
-                    )
+                        override fun onCancelled(p0: DatabaseError) {
+
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            if(p0!!.getValue()!=null){
+                                for(kullanici in p0!!.children){
+
+                                var okunanKullanici=kullanici.getValue(Users::class.java)
+
+                                    if(okunanKullanici!!.email!!.equals(etGirisYontemi.text.toString())){
+                                        Toast.makeText(this@RegisterActivity,"Bu Email Adresi Kullanılıyor",Toast.LENGTH_SHORT).show()
+                                        emailKullanimdaMi=true
+                                        break
+
+
+                                    }
+
+
+                                }
+                                if(emailKullanimdaMi==false){
+                                    loginRoot.visibility = View.GONE
+                                    loginContainer.visibility = View.VISIBLE
+                                    var transaction = supportFragmentManager.beginTransaction()
+                                    transaction.replace(R.id.loginContainer, KayitFragment())
+                                    transaction.addToBackStack("EmailGirisYontemiFragmentEklendi")
+                                    transaction.commit()
+                                    EventBus.getDefault().postSticky(
+                                        EventbusDataEvents.KayitBilgileriniGonder(null, etGirisYontemi.text.toString(), null, null,
+                                            true
+                                        )
+                                    )
+
+                                }
+
+
+                            }
+                        }
+
+                    })
+
+
+
+
+
+
 
                 }else {// email uygun değilse ekrana mesaj yazar
 
@@ -166,5 +244,34 @@ class RegisterActivity : AppCompatActivity(), FragmentManager.OnBackStackChanged
         }
         return android.util.Patterns.PHONE.matcher(kontrolEdilecekTelefon).matches()
 
+    }
+    private fun setupAuthListener() {
+        //oturum açmış kullanıcı var mı varsa home aktivity açılsın
+        mAuthListener=object : FirebaseAuth.AuthStateListener{
+            override fun onAuthStateChanged(p0: FirebaseAuth) {
+                var user= FirebaseAuth.getInstance().currentUser
+                if(user!=null){
+                    //kullanıcı doğrulandıysa homeaktivitye geç
+                    var intent=Intent(this@RegisterActivity, HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivity(intent)
+                    finish() //homeaktivityden geri tuşuna basınca logine geri döndürüyor
+
+                }else{
+
+                }
+
+            }
+
+        }
+    }
+    override fun onStart(){
+        super.onStart()
+        mAuth.addAuthStateListener(mAuthListener)
+    }
+    override fun onStop(){
+        super.onStop()
+        if(mAuthListener!=null){
+            mAuth.removeAuthStateListener(mAuthListener)
+        }
     }
 }
