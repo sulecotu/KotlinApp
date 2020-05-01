@@ -19,8 +19,10 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_kayit.*
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var mAuth: FirebaseAuth
+
     lateinit var mRef: DatabaseReference
+
+    lateinit var mAuth: FirebaseAuth
     lateinit var mAuthListener:FirebaseAuth.AuthStateListener
 
 
@@ -200,6 +202,7 @@ class LoginActivity : AppCompatActivity() {
                 if(user!=null){
                     //kullanıcı doğrulandıysa homeaktivitye geç
                     var intent=Intent(this@LoginActivity,HomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish() //homeaktivityden geri tuşuna basınca logine geri döndürüyor
 
