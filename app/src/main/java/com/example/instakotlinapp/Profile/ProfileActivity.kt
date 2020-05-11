@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.EventBus
 
 class ProfileActivity : AppCompatActivity() {
 
-    private val ACTIVITY_NO = 2
+    private val ACTIVITY_NO = 3
     private val TAG = "ProfileActivity"
 
     lateinit var mAuth: FirebaseAuth
@@ -39,13 +39,16 @@ class ProfileActivity : AppCompatActivity() {
 
 
         setupNavigationView()
-        kullaniciBilgileriniGetir()
+
         setupToolBar()
+        kullaniciBilgileriniGetir()
         setupProfilePhoto()
 
     }
 
     private fun kullaniciBilgileriniGetir() {
+        profillDüzenleButon.isEnabled=false
+        imgProfileSettings.isEnabled=false
         mRef.child("kullanıcılar").child(mUser!!.uid).addValueEventListener(object :ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
 
@@ -55,15 +58,20 @@ class ProfileActivity : AppCompatActivity() {
                 if(p0!!.getValue()!=null){
                     var okunanKullaniciBilgileri=p0!!.getValue(Users::class.java)
 
+
                     EventBus.getDefault().postSticky(EventbusDataEvents.KullaniciBilgileriniGonder(okunanKullaniciBilgileri))
+                    profillDüzenleButon.isEnabled=true
+                    imgProfileSettings.isEnabled=true
+
+
                     tvProfilAdiToolbar.setText(okunanKullaniciBilgileri!!.kullanici_adi)
-                    tvProfilGercekAdi.setText(okunanKullaniciBilgileri!!.kullanici_adi)
+                    tvProfilGercekAdi.setText(okunanKullaniciBilgileri!!.ad_soyad)
                     tvTakipciSayisi.setText((okunanKullaniciBilgileri!!.kulaniciDetaylari!!.takipciSayisi))
                     tvTakipSayisi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.takipSayisi)
                     tvGönderiSayisi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.gönderiSayisi)
 
                     var imgUrl=okunanKullaniciBilgileri!!.kulaniciDetaylari!!.profilResmi!!
-                    UniversalImageLoader.setImage(imgUrl,circleProfileImage,progressBar, null)
+                    UniversalImageLoader.setImage(imgUrl,circleProfileImage,progressBar, "")
                     if(!okunanKullaniciBilgileri!!.kulaniciDetaylari!!.biyografi!!.isNullOrEmpty()){
                         tvBiyografi.visibility=View.VISIBLE
                         tvBiyografi.setText(okunanKullaniciBilgileri!!.kulaniciDetaylari!!.biyografi!!)

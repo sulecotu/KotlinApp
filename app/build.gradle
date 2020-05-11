@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.instakotlinapp"
-        minSdkVersion 28
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -56,10 +56,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.3'
     implementation 'com.google.firebase:firebase-auth:19.3.0'
     implementation 'com.google.firebase:firebase-database:19.2.1' ////firebase database
-
+    implementation 'com.google.firebase:firebase-storage:19.1.1'// strage
 
 
     //firebaseui kütüphane
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
+
+    //yakınlaştırıp uzaklaştırma gibi fotoğraf detayları için kullandığımız kütüphane
+    implementation "com.naver.android.helloyako:imagecropview:1.2.3"
 
 }
