@@ -62,7 +62,12 @@ dependencies {
     //firebaseui kütüphane
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
 
-    //yakınlaştırıp uzaklaştırma gibi fotoğraf detayları için kullandığımız kütüphane
+    //universal view
+    compile 'com.linsea:universalvideoview:1.1.0@aar'
+
+    //crop image view
     implementation "com.naver.android.helloyako:imagecropview:1.2.3"
+
+
 
 }

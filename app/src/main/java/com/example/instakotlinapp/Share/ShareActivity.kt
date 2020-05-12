@@ -2,6 +2,7 @@ package com.example.instakotlinapp.Share
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.SharePagerAdapter
 import kotlinx.android.synthetic.main.activity_share.*
@@ -30,6 +31,12 @@ class ShareActivity : AppCompatActivity() {
 
         shareViewPager.adapter=sharePagerAdapter
         shareTabLayout.setupWithViewPager(shareViewPager)
+    }
+
+    override fun onBackPressed() {
+        anaLayout.visibility= View.VISIBLE
+        fragmentContainerLayout.visibility=View.GONE
+        super.onBackPressed()
     }
 
 }

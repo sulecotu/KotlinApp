@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tvIleriButton"
                 android:layout_width="45dp"
                 android:layout_height="35dp"
                 android:layout_marginTop="8dp"
@@ -75,18 +75,19 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar3">
 
         <FrameLayout
-            android:id="@+id/imageView"
+            android:id="@+id/imgBuyukResim"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" >
-
             <com.naver.android.helloyako.imagecrop.view.ImageCropView
                 xmlns:imagecrop="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
+                android:id="@+id/imgCropView"
                 imagecrop:outsideLayerColor="#99000000"
                 imagecrop:setInnerGridMode="on"
                 imagecrop:gridInnerStroke="1dp"
@@ -95,19 +96,32 @@
                 imagecrop:gridOuterStroke="1dp"
                 imagecrop:gridOuterColor="#ffffff"/>
 
+            <com.universalvideoview.UniversalVideoView
+                android:id="@+id/videoView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:uvv_autoRotation="true"
+                app:uvv_fitXY="false" />
+
+
 
 
         </FrameLayout>
-
 
         <GridView
             android:id="@+id/gridviewResimler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"
+            android:numColumns="4"
+            android:gravity="center"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/imgBuyukResim" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
