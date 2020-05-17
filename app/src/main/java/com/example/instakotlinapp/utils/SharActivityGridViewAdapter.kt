@@ -59,7 +59,7 @@ class SharActivityGridViewAdapter(context: Context, resource: Int, var klasordek
             retriver.setDataSource(context, Uri.parse("file://" + dosyaYolu))
             var videoSuresi = retriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
             var videoSuresiLong = videoSuresi.toLong()
-            viewHolder.tvSure.setText(videoSuresi)
+            viewHolder.tvSure.setText(convertDuration(videoSuresiLong))
             UniversalImageLoader.setImage(
                 klasordekiDosyalar.get(position),
                 viewHolder.imageView,
@@ -85,6 +85,26 @@ class SharActivityGridViewAdapter(context: Context, resource: Int, var klasordek
 
 
         return tekSutunResim!!
+
+    }
+
+    fun convertDuration(duration :Long):String{
+
+
+        val second =duration/1000 % 60
+        val minute =duration / (1000 *60) %60
+        val hour =duration / (1000 *60*60) %24
+        var time =""
+        if(hour>0){
+            time = String.format("%02d:%02d:%02d",hour,minute,second)
+        } else{
+            time= String.format("%02d:%02d",minute,second)
+
+        }
+        return  time
+
+
+
 
     }
 

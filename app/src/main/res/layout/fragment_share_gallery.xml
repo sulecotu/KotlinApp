@@ -111,7 +111,7 @@
         </FrameLayout>
 
         <GridView
-            android:id="@+id/gridviewResimler"
+            android:id="@+id/recycleViewDosyalar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"

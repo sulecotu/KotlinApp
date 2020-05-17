@@ -10,12 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 
 import com.example.instakotlinapp.R
-import com.example.instakotlinapp.utils.Dosyaİslemleri
-import com.example.instakotlinapp.utils.EventbusDataEvents
-import com.example.instakotlinapp.utils.SharActivityGridViewAdapter
-import com.example.instakotlinapp.utils.UniversalImageLoader
+import com.example.instakotlinapp.utils.*
 import kotlinx.android.synthetic.main.activity_share.*
 import kotlinx.android.synthetic.main.fragment_share_gallery.*
 import kotlinx.android.synthetic.main.fragment_share_gallery.view.*
@@ -26,6 +24,7 @@ import org.greenrobot.eventbus.EventBus
  */
 class ShareGalleryFragment : Fragment() {
     var secilenResimYolu:String?=null
+    var dosyaTuruResimMi:Boolean?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +68,7 @@ class ShareGalleryFragment : Fragment() {
 
             // whatsappa veya indirilenlere tıklayınca tetiklenir.
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
+                //setupRecycView(Dosyaİslemleri.klasordekiDosyalariGetir(klasorlerYollari.get(position)))
                 setupGridView(Dosyaİslemleri.klasordekiDosyalariGetir(klasorlerYollari.get(position)))
           }
 
@@ -78,14 +77,18 @@ class ShareGalleryFragment : Fragment() {
             activity!!.anaLayout.visibility= View.GONE
             activity!!.fragmentContainerLayout.visibility=View.VISIBLE
             var transaction=activity!!.supportFragmentManager.beginTransaction()
-            EventBus.getDefault().postSticky(EventbusDataEvents.PaylasilacakResmiGonder(secilenResimYolu))
-
+            EventBus.getDefault().postSticky(EventbusDataEvents.PaylasilacakResmiGonder(secilenResimYolu,dosyaTuruResimMi))
+                videoView.stopPlayback()
             transaction.replace(R.id.fragmentContainerLayout, ShareNextFragment())
             transaction.addToBackStack("shareNextFragmentEklendi")
             transaction.commit()
         }
 
+        view.imageView2.setOnClickListener {
 
+            activity!!.onBackPressed()
+
+        }
 
 
 
@@ -93,17 +96,26 @@ class ShareGalleryFragment : Fragment() {
         return view
     }
 
+   /* private fun setupRecycView(klasordekiDosyalar: ArrayList<String>) {
+
+        var recyclViewAdapter=ShareGalleryRecyclerAdapter(klasordekiDosyalar,this.activity!!)
+        recycleViewDosyalar.adapter=recyclViewAdapter
+
+
+        var layoutManager =GridLayoutManager(this.activity,4)
+        recycleViewDosyalar
+    }*/
 
 
     fun setupGridView(secilenKlasordekiDosyalar :ArrayList<String>){
         var gridAdapter = SharActivityGridViewAdapter(activity!!, R.layout.tek_sutun_grid_resim, secilenKlasordekiDosyalar)
-        gridviewResimler.adapter = gridAdapter
+        recycleViewDosyalar.adapter = gridAdapter
 
         secilenResimYolu=secilenKlasordekiDosyalar.get(0)
         resimVeyaVideoGoster(secilenKlasordekiDosyalar.get(0))
 
 
-        gridviewResimler.setOnItemClickListener(object : AdapterView.OnItemClickListener{
+        recycleViewDosyalar.setOnItemClickListener(object : AdapterView.OnItemClickListener{
             //seçilen resmi göster-me
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -131,7 +143,8 @@ class ShareGalleryFragment : Fragment() {
         if(dosyaTuru != null){
             if( dosyaTuru.equals(".mp4")){
                 videoView.visibility=View.VISIBLE
-                imgCropView.visibility=View.VISIBLE
+                imgCropView.visibility=View.GONE
+                dosyaTuruResimMi=false
                 videoView.setVideoURI(Uri.parse("file://"+dosyaYolu))
                 Log.e("HATA","Video : "  +"file://"+dosyaYolu)
                 videoView.start()
@@ -139,6 +152,7 @@ class ShareGalleryFragment : Fragment() {
             else{
                 videoView.visibility=View.GONE
                 imgCropView.visibility=View.VISIBLE
+                dosyaTuruResimMi=true
                 UniversalImageLoader.setImage(dosyaYolu,imgCropView,null,"file://")
             }
 
