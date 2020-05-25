@@ -199,6 +199,39 @@
             app:layout_constraintTop_toTopOf="@+id/circleProfileImage"
             tools:visibility="visible" />
 
+        <View
+            android:id="@+id/golgelik2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/golgelik"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBiyografi"
+            tools:ignore="MissingConstraints">
+
+        </View>
+
+        <ImageView
+            android:id="@+id/imgGridView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.041"
+            app:layout_constraintStart_toStartOf="@+id/golgelik2"
+            app:layout_constraintTop_toBottomOf="@+id/golgelik2"
+            app:srcCompat="@drawable/ic_grid_view" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profileRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgGridView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +244,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
     </FrameLayout>
 

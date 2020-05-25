@@ -73,4 +73,7 @@ dependencies {
 
     ///silicompressor  dosya sıkıştırma programı
     implementation 'com.iceteck.silicompressorr:silicompressor:2.1'
+
+    //çift tıklayarak beğenme
+    implementation 'com.github.Kshitij-Jain:InstaLikeView:1.05'
 }

@@ -18,6 +18,7 @@ import com.example.instakotlinapp.utils.HomeFragmentRecylerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment() {
@@ -43,8 +44,15 @@ class HomeFragment : Fragment() {
         tumGonderiler=ArrayList<UserPosts>()
 
         kullaniciPostlariniGetir(mUser.uid!!)
+
+
         return fragmentView
     }
+
+
+
+
+
 
     private fun kullaniciPostlariniGetir(kullaniciID:String) {
 
@@ -103,7 +111,7 @@ class HomeFragment : Fragment() {
         var recyclerView=fragmentView.recyclerView
         var recyclerAdapter=HomeFragmentRecylerAdapter(this.activity!!,tumGonderiler)
         recyclerView.adapter=recyclerAdapter
-        recyclerView.layoutManager=LinearLayoutManager(this.activity!!,LinearLayoutManager.VERTICAL,false)
+        recyclerView.layoutManager=LinearLayoutManager(this.activity!!,LinearLayoutManager.VERTICAL,true)
 
     }
 

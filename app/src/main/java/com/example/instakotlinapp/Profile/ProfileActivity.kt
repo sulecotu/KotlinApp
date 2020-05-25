@@ -2,14 +2,18 @@ package com.example.instakotlinapp.Profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.instakotlinapp.Home.HomeActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.instakotlinapp.Login.LoginActivity
+import com.example.instakotlinapp.Model.Posts
+import com.example.instakotlinapp.Model.UserPosts
 import com.example.instakotlinapp.Model.Users
 import com.example.instakotlinapp.R
 import com.example.instakotlinapp.utils.BottomNavigationViewHelper
 import com.example.instakotlinapp.utils.EventbusDataEvents
+import com.example.instakotlinapp.utils.ProfilePostGridRecyclerAdapter
 import com.example.instakotlinapp.utils.UniversalImageLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +25,8 @@ class ProfileActivity : AppCompatActivity() {
 
     private val ACTIVITY_NO = 3
     private val TAG = "ProfileActivity"
+    lateinit var tumGonderiler:ArrayList<UserPosts>
+
 
     lateinit var mAuth: FirebaseAuth
     lateinit var mAuthListener:FirebaseAuth.AuthStateListener
@@ -37,12 +43,18 @@ class ProfileActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mUser=mAuth.currentUser!!
 
+        tumGonderiler=ArrayList<UserPosts>()
+
 
 
 
         setupToolBar()
         kullaniciBilgileriniGetir()
         setupProfilePhoto()
+        kullaniciPostlariniGetir(mUser.uid)
+        imgGridView.setOnClickListener {
+            setupRecyclerView(1)
+        }
 
     }
 
@@ -125,6 +137,70 @@ class ProfileActivity : AppCompatActivity() {
         var menuItem = menu.getItem(ACTIVITY_NO)
         menuItem.isChecked = true
     }
+    private fun kullaniciPostlariniGetir(kullaniciID:String) {
+
+        mRef.child("kullanıcılar").child(kullaniciID).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                var userID=kullaniciID
+                var kullaniciAdi=p0!!.getValue(Users::class.java)!!.kullanici_adi
+                var kullaniciFotoURL=p0!!.getValue(Users::class.java)!!.kulaniciDetaylari!!.profilResmi
+
+                mRef.run {
+                    child("posts").child(kullaniciID).addListenerForSingleValueEvent(object :ValueEventListener {
+                        override fun onCancelled(p0: DatabaseError) {
+
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            if (p0!!.hasChildren()) {
+                                Log.e("HATA", "ÇOCUK VAR")
+                                for (ds in p0!!.children) {
+                                    var eklenecekUserPosts= UserPosts()
+                                    eklenecekUserPosts.userID=userID
+                                    eklenecekUserPosts.userName=kullaniciAdi
+                                    eklenecekUserPosts.userPhotoURL=kullaniciFotoURL
+                                    eklenecekUserPosts.postID =
+                                        ds.getValue(Posts::class.java)!!.post_id
+                                    eklenecekUserPosts.postURL =
+                                        ds.getValue(Posts::class.java)!!.photo_url
+                                    eklenecekUserPosts.postAciklama =
+                                        ds.getValue(Posts::class.java)!!.acıklama
+
+                                    tumGonderiler.add(eklenecekUserPosts)
+
+                                }
+                            }
+
+                            setupRecyclerView(1)
+
+
+                        }
+                    })
+                }
+
+
+            }
+
+        })
+
+    }
+
+    private fun setupRecyclerView(layoutCesidi: Int) {
+        if(layoutCesidi==1){
+            var kullaniciPostListe=profileRecyclerView
+            kullaniciPostListe.adapter=ProfilePostGridRecyclerAdapter(tumGonderiler,this)
+            kullaniciPostListe.layoutManager=GridLayoutManager(this,3)
+
+        }else if(layoutCesidi==2){
+
+        }
+
+    }
+
 
     override fun onBackPressed() {
         profilRoot.visibility= View.VISIBLE
